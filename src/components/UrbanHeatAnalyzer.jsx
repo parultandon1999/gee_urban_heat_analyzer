@@ -556,8 +556,8 @@ const UrbanHeatAnalyzer = () => {
           </div>
         </div>
         {fullscreenMap && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-xl w-full h-full max-w-6xl max-h-screen flex flex-col">
+          <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-0 sm:p-4">
+            <div className="bg-white rounded-xl w-full h-full sm:w-full sm:max-w-6xl sm:max-h-screen sm:rounded-xl flex flex-col">
               <div className="p-4 border-b border-slate-200 flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-slate-900">Heat Map - Fullscreen</h3>
                 <button 
@@ -567,7 +567,7 @@ const UrbanHeatAnalyzer = () => {
                   ×
                 </button>
               </div>
-              <div className="flex-1 overflow-hidden">
+              <div className="flex-1 overflow-hidden w-full h-full">
                 {results?.mapHtml && (
                   <div 
                     ref={fullscreenMapRef}
@@ -580,7 +580,7 @@ const UrbanHeatAnalyzer = () => {
         )}
         {showGuide && (
         <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl w-full max-w-2xl max-h-screen overflow-y-auto flex flex-col">
+          <div className="bg-white w-full max-w-2xl h-[700px] overflow-y-auto flex flex-col">
             <div className="sticky top-0 p-4 border-b border-slate-200 flex items-center justify-between bg-white">
               <h2 className="text-xl font-bold text-slate-900">Urban Heat Island Analyzer - Guide</h2>
               <button 
@@ -590,7 +590,6 @@ const UrbanHeatAnalyzer = () => {
                 ×
               </button>
             </div>
-            
             <div className="p-6 space-y-6">
               {/* What is Urban Heat Island */}
               <section>
