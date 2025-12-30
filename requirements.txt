@@ -1,0 +1,9 @@
+Flask
+Flask-CORS
+Flask-Limiter
+google-earth-engine
+geemap
+scikit-learn
+folium
+python-dotenv
+gunicorn

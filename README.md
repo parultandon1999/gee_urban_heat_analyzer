@@ -1,70 +1,132 @@
-# Getting Started with Create React App
+Urban Heat Island Analyzer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An AI-powered tool that identifies urban heat islands and recommends optimal tree planting locations using satellite imagery and machine learning.
 
-## Available Scripts
+Features
 
-In the project directory, you can run:
+- Satellite Data Analysis: Uses Google Earth Engine to access Landsat, Sentinel-2, and MODIS satellite imagery
+- Temperature Mapping: Calculates Land Surface Temperature (LST) to identify hot zones
+- Vegetation Analysis: Computes NDVI (Normalized Difference Vegetation Index) to assess vegetation coverage
+- Hotspot Detection: Identifies areas with high temperature and low vegetation
+- Smart Clustering: Uses K-Means clustering to group hotspots into priority planting zones
+- Interactive Maps: Generates Folium-based maps showing priority zones and candidate locations
+- Real-time Logs: Streams analysis progress with live log updates
 
-### `npm start`
+Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Frontend: React 19, Tailwind CSS, Lucide React icons
+Backend: Flask, Google Earth Engine API, scikit-learn
+Satellite Data: Landsat 9, Landsat 8, Sentinel-2, MODIS
+Mapping: Folium, Geemap
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Setup
 
-### `npm test`
+Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Python 3.8+
+- Node.js 16+
+- Google Earth Engine account with project ID
+- Google Cloud credentials
 
-### `npm run build`
+Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the repository
+2. Install backend dependencies: pip install -r requirements.txt
+3. Install frontend dependencies: npm install
+4. Set up environment variables in .env with your GEE_PROJECT_ID
+5. Authenticate with Google Earth Engine: earthengine authenticate
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Running
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Backend: python app.py (runs on http://localhost:5000)
+Frontend: npm start (runs on http://localhost:3000)
 
-### `npm run eject`
+Usage
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Enter location coordinates (latitude, longitude) or city name
+2. Select analysis period (minimum 7 days, maximum 365 days)
+3. Choose satellite dataset (default: Landsat 9)
+4. Adjust thresholds for cloud cover, temperature, and vegetation
+5. Click Analyze to start processing
+6. View results on the interactive map and priority zones list
+7. Download the map as HTML file
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+API Endpoints
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+POST /api/analyze - Start heat island analysis
+GET /api/logs/<session_id> - Stream analysis logs (Server-Sent Events)
+GET /api/analysis-result/<session_id> - Get final analysis results
+GET /api/parameters - Get default parameters
+GET /api/download-map/<filename> - Download generated map
+GET /api/health - Health check
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Configuration
 
-## Learn More
+Adjust analysis parameters in the UI:
+- Cloud Cover Threshold: Filter out cloudy images (0-100%)
+- Hot Threshold: Temperature cutoff for hotspots (0-60°C)
+- Vegetation Threshold: NDVI cutoff for vegetation (0-1)
+- Dataset: Choose satellite imagery source
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Limitations
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Analysis limited to 365-day periods
+- Requires clear satellite imagery (cloud cover filtering)
+- Rate limited to 50 requests per minute
+- Thermal data availability varies by dataset
 
-### Code Splitting
+License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+MIT
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Future Scope
 
-### Making a Progressive Web App
+Planned Enhancements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Machine Learning Improvements
+- Implement deep learning models (CNN, LSTM) for more accurate temperature prediction
+- Train custom models on historical data to improve hotspot detection accuracy
+- Add anomaly detection to identify unusual temperature patterns
+- Develop predictive models to forecast future heat island growth
 
-### Advanced Configuration
+Advanced Analysis Features
+- Multi-temporal analysis to track heat island changes over years
+- Seasonal trend analysis to identify peak heat periods
+- Integration of air quality data (PM2.5, NO2) with temperature analysis
+- Soil moisture and water body detection for better cooling potential assessment
+- Population density mapping to prioritize high-impact planting zones
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Enhanced User Experience
+- 3D visualization of temperature gradients and terrain
+- Comparison tool to analyze multiple cities side-by-side
+- Historical data comparison to show UHI progression
+- Export analysis reports in PDF format with detailed statistics
+- Mobile app for on-field verification and tree planting tracking
 
-### Deployment
+Data Integration
+- Real-time weather station data integration
+- Integration with urban planning databases
+- Building footprint and material classification
+- Tree species recommendation based on climate and soil conditions
+- Cost-benefit analysis for tree planting initiatives
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Optimization Algorithms
+- Genetic algorithms to optimize tree placement for maximum cooling
+- Network analysis to identify connected cooling corridors
+- Simulation models to predict temperature reduction after planting
+- Resource allocation optimization for planting campaigns
 
-### `npm run build` fails to minify
+Scalability and Performance
+- Distributed processing for large-scale regional analysis
+- Caching mechanisms for faster repeated queries
+- Database integration for storing historical analysis results
+- API rate limit optimization and batch processing support
+- Support for real-time streaming satellite data
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Community and Collaboration
+- User authentication and project sharing capabilities
+- Collaborative analysis tools for urban planners and environmental teams
+- Integration with citizen science platforms for ground-truth validation
+- Public dashboard showing city-wide heat island metrics
+- API for third-party integrations with urban planning tools
