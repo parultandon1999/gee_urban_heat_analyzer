@@ -54,13 +54,27 @@ def authenticate_gee(project_id):
     project_id = str(project_id)
     try:
         ee.Initialize()
-        print("google earth engine already initialized")
+        print("Google Earth Engine already initialized")
     except Exception as e:
         try:
-            print("Attempting to authenticate Google Earth Engine...")
-            ee.Authenticate()
-            ee.Initialize(project=project_id)
-            print("Successfully authenticated to Google Earth Engine")
+            print("Attempting to authenticate Google Earth Engine with service account...")
+            
+            # Try to use service account credentials from environment
+            service_account_json = os.getenv("GEE_SERVICE_ACCOUNT_JSON")
+            
+            if service_account_json:
+                # Service account authentication (for production/Render)
+                import json
+                credentials_dict = json.loads(service_account_json)
+                credentials = ee.ServiceAccountCredentials.from_string(service_account_json)
+                ee.Initialize(credentials, project=project_id)
+                print("Successfully authenticated to Google Earth Engine with service account")
+            else:
+                # Try default credentials (local development)
+                print("No service account found, trying default credentials...")
+                ee.Initialize(project=project_id)
+                print("Successfully authenticated to Google Earth Engine with default credentials")
+                
         except Exception as auth_error:
             print(f"GEE authentication failed: {auth_error}")
             import traceback
