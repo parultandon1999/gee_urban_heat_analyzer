@@ -160,12 +160,8 @@ const UrbanHeatAnalyzer = () => {
       <header className="bg-white border-slate-200 shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-2">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg border-b border-slate-900">
-              <img 
-                src="/icon.png" 
-                alt="Logo" 
-                className="w-8 h-8" 
-              />
+            <div className="p-1.5 rounded-lg bg-green-400 border-b border-slate-900">
+              <Leaf className="w-6 h-6 text-gray" />
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-900">Urban Heat Island Analyzer</h1>
@@ -173,21 +169,19 @@ const UrbanHeatAnalyzer = () => {
             </div>
             <div className="ml-auto flex items-center gap-2">
               <button
-  type="button"
-  onClick={() =>
-    window.open(
-      "https://developers.google.com/earth-engine/datasets",
-      "_blank",
-      "noopener,noreferrer"
-    )
-  }
-  className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm font-semibold bg-blue-50 hover:bg-blue-100 text-blue-600"
->
-  <Database className="w-4 h-4" />
-  Browse datasets
-</button>
-
-
+                type="button"
+                onClick={() =>
+                  window.open(
+                    "https://developers.google.com/earth-engine/datasets",
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
+                className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm font-semibold bg-blue-50 hover:bg-blue-100 text-blue-600"
+              >
+                <Database className="w-4 h-4" />
+                Browse datasets
+              </button>
               <button
                 onClick={() => setShowGuide(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm font-semibold bg-blue-50 hover:bg-blue-100 text-blue-600"
