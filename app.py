@@ -49,6 +49,10 @@ limiter = Limiter(
     default_limits = ["200 per day", "50 per hour"]
 )
 
+#################################################################
+#######  THIS AUTHENTICATION IS FOR DEPLOYEMENT SERVER  #########
+#######  YOU MUST COMMENT IT WHILE WORKING WITH LOCAL  ##########
+#################################################################
 # Initialize Earth Engine once at startup
 def authenticate_gee(project_id):
     project_id = str(project_id)
@@ -106,6 +110,41 @@ try:
 except Exception as e:
     print(f"GEE authentication failed at startup: {e}\n")
     GEE_INITIALIZED = False
+
+
+#######################################################################
+#######  THIS AUTHENTICATION IS FOR PC LOCAL SERVER     ###############
+#######  YOU MUST COMMENT IT WHILE WORKING WITH DEPLOYEMENT  ##########
+#######################################################################
+
+# # Initialize Earth Engine once at startup
+# def authenticate_gee(project_id):
+#     project_id = str(project_id)
+#     try:
+#         ee.Initialize()
+#         print("Google Earth Engine already initialized")
+#         return True
+#     except Exception as e:
+#         print(f"Initial initialization failed: {e}")
+        
+#     try:
+#         print("Attempting to authenticate Google Earth Engine...")
+#         ee.Authenticate()
+#         ee.Initialize(project=project_id)
+#         print("Successfully authenticated to Google Earth Engine")
+#         return True
+#     except Exception as auth_error:
+#         print(f"GEE authentication failed: {auth_error}")
+#         import traceback
+#         traceback.print_exc()
+#         raise RuntimeError(f"Failed to authenticate with GEE: {auth_error}")
+
+# try:
+#     authenticate_gee(GEE_PROJECT_ID)
+#     GEE_INITIALIZED = True
+# except Exception as e:
+#     print(f"GEE authentication failed at startup: {e}\n")
+#     GEE_INITIALIZED = False
 
 def validate_coordinates(latitude, longitude):
     if not (-90 <= latitude <= 90):
@@ -445,11 +484,15 @@ def _run_analysis(session_id, latitude, longitude, city_name, start_date, end_da
                 lat, lon = center[0], center[1]
                 zone_data = df[df['cluster'] == i]
 
+                # each zone with its own temp data
+                zone_temps = zone_data.get('LST_Celsius', []) if 'LST_Celsius' in zone_data.columns else []
+                zone_avg_temp = zone_temps.mean() if len(zone_temps) > 0 else avg_temp
+
                 priority_zones.append({
                     'id': i + 1,
                     'lat': float(lat),
                     'lon': float(lon),
-                    'temp': round(avg_temp, 2) if avg_temp is not None else None,
+                    'temp': round(zone_avg_temp, 2) if zone_avg_temp is not None else None,
                     'pointCount': len(zone_data),
                     'area': f"{len(zone_data) * 0.9:.1f} km²"
                 })
@@ -644,5 +687,8 @@ def not_found(error):
 def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
 # Don't use app.run() - let gunicorn handle it in production
 # For local development, run: python app.py or flask run
