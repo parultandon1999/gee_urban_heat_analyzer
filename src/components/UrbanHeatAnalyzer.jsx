@@ -240,22 +240,6 @@ const UrbanHeatAnalyzer = () => {
                     />
                   </div>
                 </div>
-
-                {/* GEE Project ID */}
-                <div>
-                  <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
-                    <Cloud className="w-4 h-4" />
-                    GEE Project ID
-                  </label>
-                  <input
-                    type="text"
-                    name="geeProjectId"
-                    value={formData.geeProjectId}
-                    onChange={handleInputChange}
-                    placeholder="Google Earth Engine Project ID"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-xs"
-                  />
-                </div>
                 {/* Dataset */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
@@ -662,10 +646,6 @@ const UrbanHeatAnalyzer = () => {
                     <p><strong>City Name:</strong> Name of the city you're analyzing. <strong>Latitude/Longitude:</strong> Geographic coordinates. Find these on Google Maps by right-clicking on a location.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">GEE Project ID</p>
-                    <p>Your Google Earth Engine project ID. Get this from your GEE account at console.earthengine.google.com</p>
-                  </div>
-                  <div>
                     <p className="font-semibold text-slate-900 mb-1">Dataset</p>
                     <p>Choose which satellite dataset to use. Examples: <strong>LANDSAT/LC09/C02/T1_L2</strong> (Landsat 9, recommended), <strong>COPERNICUS/S2_SR_HARMONIZED</strong> (Sentinel-2), <strong>MODIS/061/MOD11A2</strong> (MODIS). Different datasets have different resolutions and coverage.</p>
                   </div>
@@ -695,10 +675,6 @@ const UrbanHeatAnalyzer = () => {
                   <div>
                     <p className="font-semibold text-slate-900 mb-1">1. Enter Location Details</p>
                     <p>Fill in the city name and coordinates. You can find coordinates on Google Maps by right-clicking and selecting the coordinates.</p>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-slate-900 mb-1">2. Configure GEE Settings</p>
-                    <p>Enter your GEE Project ID and choose a dataset. If unsure, use the default Landsat 9 dataset.</p>
                   </div>
                   <div>
                     <p className="font-semibold text-slate-900 mb-1">3. Set Analysis Period</p>
