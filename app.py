@@ -611,6 +611,5 @@ def not_found(error):
 def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
 
-if __name__ == '__main__':
-    port = int(os.getenv('PORT', 5000))
-    app.run(debug=False, host='0.0.0.0', port=port)
+# Don't use app.run() - let gunicorn handle it in production
+# For local development, run: python app.py or flask run
