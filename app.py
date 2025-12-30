@@ -361,8 +361,6 @@ def analyze_heat_island():
         except (ValueError, TypeError) as e:
             return jsonify({'error': f'Invalid threshold values: {str(e)}'}), 400
 
-        city_name = data.get('cityName', 'Unknown').strip() or 'Unknown'
-        
         # Create session for this analysis
         session_id = get_session_id()
         with sessions_lock:
@@ -377,7 +375,7 @@ def analyze_heat_island():
         thread = threading.Thread(
             target=_run_analysis,
             args=(
-                session_id, latitude, longitude, city_name,
+                session_id, latitude, longitude,
                 start_date, end_date, cloud_cover,
                 hot_threshold, veg_threshold, dataset
             )
@@ -396,12 +394,12 @@ def analyze_heat_island():
         return jsonify({'error': 'Internal server error during analysis.'}), 500
 
 
-def _run_analysis(session_id, latitude, longitude, city_name, start_date, end_date, 
+def _run_analysis(session_id, latitude, longitude, start_date, end_date, 
                   cloud_cover, hot_threshold, veg_threshold, dataset):
     """Run analysis in background and stream logs"""
     try:
         stream_log(session_id, "Starting analysis...")
-        stream_log(session_id, f"Processing analysis for {city_name} (lat: {latitude}, lon: {longitude})...")
+        stream_log(session_id, f"Processing analysis for (lat: {latitude}, lon: {longitude})...")
         stream_log(session_id, f"Using dataset: {dataset}")
 
         # === Fetch satellite data ===
@@ -534,7 +532,7 @@ def _run_analysis(session_id, latitude, longitude, city_name, start_date, end_da
                     icon=folium.Icon(color='green', icon='tree', prefix='fa')
                 ).add_to(m)
 
-            outfile = f"urban_heat_map_{city_name}.html"
+            outfile = f"urban_heat_map_{latitude}_{longitude}.html"
             m.save(outfile)
             stream_log(session_id, f"✓ Map saved as {outfile}")
 
@@ -546,7 +544,6 @@ def _run_analysis(session_id, latitude, longitude, city_name, start_date, end_da
         # === Final result ===
         results = {
             'success': True,
-            'cityName': city_name,
             'hotspotsFound': len(df),
             'clusters': len(centers),
             'minTemperature': round(min_temp, 2) if min_temp is not None else None,
@@ -651,7 +648,6 @@ def get_default_parameters():
     return jsonify({
         'latitude': 29.518321,
         'longitude': 74.993558,
-        'cityName': 'Sirsa',
         'startDate': '2025-05-29',
         'endDate': '2025-08-30',
         'cloudCover': 20,

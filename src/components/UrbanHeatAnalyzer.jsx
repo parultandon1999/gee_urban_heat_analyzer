@@ -20,7 +20,6 @@ const UrbanHeatAnalyzer = () => {
   const [formData, setFormData] = useState({
     latitude: '29.518321',
     longitude: '74.993558',
-    cityName: 'Sirsa',
     startDate: '2025-05-29',
     endDate: '2025-08-30',
     cloudCover: '20',
@@ -98,7 +97,6 @@ const UrbanHeatAnalyzer = () => {
       const parameters = {
         latitude: parseFloat(formData.latitude),
         longitude: parseFloat(formData.longitude),
-        cityName: formData.cityName,
         startDate: formData.startDate,
         endDate: formData.endDate,
         cloudCover: parseInt(formData.cloudCover),
@@ -191,7 +189,7 @@ const UrbanHeatAnalyzer = () => {
               >
                 <BookOpen className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Guide</span>
-                <span className="sm:hidden">Help</span>
+                <span className="sm:hidden">Guide</span>
               </button>
             </div>
           </div>
@@ -211,16 +209,8 @@ const UrbanHeatAnalyzer = () => {
                 <div>
                   <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
                     <Locate className="w-4 h-4" />
-                    Location
+                    Location Coordinates
                   </label>
-                  <input
-                    type="text"
-                    name="cityName"
-                    value={formData.cityName}
-                    onChange={handleInputChange}
-                    placeholder="City Name"
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-xs mb-2"
-                  />
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="text"

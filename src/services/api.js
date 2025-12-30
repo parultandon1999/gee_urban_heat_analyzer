@@ -216,12 +216,7 @@ const validateAnalysisParameters = (parameters) => {
   
   // Validate thresholds
   validateThresholds(parameters.cloudCover, parameters.hotThreshold, parameters.vegThreshold);
-  
-  // Validate city name
-  if (!parameters.cityName || parameters.cityName.trim().length === 0) {
-    throw new Error('City name is required');
-  }
-  
+    
   // Validate dataset
   validateDataset(parameters.dataset);
   
