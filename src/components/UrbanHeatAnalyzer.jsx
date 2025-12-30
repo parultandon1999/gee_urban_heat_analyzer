@@ -541,21 +541,22 @@ const UrbanHeatAnalyzer = () => {
         </div>
         {fullscreenMap && (
           <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-0 sm:p-4">
-            <div className="bg-white rounded-xl w-full h-full sm:w-full sm:max-w-6xl sm:max-h-screen sm:rounded-xl flex flex-col">
-              <div className="p-4 border-b border-slate-200 flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-slate-900">Heat Map - Fullscreen</h3>
+            <div className="bg-white rounded-none sm:rounded-xl w-full h-full sm:w-full sm:max-w-6xl sm:max-h-screen sm:rounded-xl flex flex-col">
+              <div className="sticky top-0 z-10 p-3 sm:p-4 border-b border-slate-200 flex items-center justify-between bg-white">
+                <h3 className="text-base sm:text-lg font-semibold text-slate-900 truncate flex-1">Heat Map - Fullscreen</h3>
                 <button 
                   onClick={() => setFullscreenMap(false)}
-                  className="text-slate-500 hover:text-slate-700 text-2xl"
+                  className="text-slate-500 hover:text-slate-700 text-2xl sm:text-3xl flex-shrink-0 ml-2"
                 >
                   ×
                 </button>
               </div>
-              <div className="flex-1 overflow-hidden w-full h-full">
+              <div className="flex-1 overflow-hidden w-full">
                 {results?.mapHtml && (
                   <div 
                     ref={fullscreenMapRef}
                     className="w-full h-full"
+                    style={{ height: '100%', width: '100%' }}
                   />
                 )}
               </div>
@@ -677,27 +678,27 @@ const UrbanHeatAnalyzer = () => {
                     <p>Fill in the city name and coordinates. You can find coordinates on Google Maps by right-clicking and selecting the coordinates.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">3. Set Analysis Period</p>
+                    <p className="font-semibold text-slate-900 mb-1">2. Set Analysis Period</p>
                     <p>Choose start and end dates. For best results, use summer months when heat islands are most pronounced.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">4. Adjust Thresholds (Optional)</p>
+                    <p className="font-semibold text-slate-900 mb-1">3. Adjust Thresholds (Optional)</p>
                     <p>Modify cloud cover, hot threshold, and vegetation threshold if needed. Default values work well for most cases. Lower hot threshold = more areas flagged as needing trees.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">5. Click Analyze</p>
+                    <p className="font-semibold text-slate-900 mb-1">4. Click Analyze</p>
                     <p>Click the green "Analyze" button. The tool will process satellite data and show real-time progress in the logs panel. Analysis typically takes 2-10 minutes depending on area size.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">6. View Results</p>
+                    <p className="font-semibold text-slate-900 mb-1">5. View Results</p>
                     <p>Once complete, you'll see: a heat map showing temperature distribution, summary statistics, priority zones list, and temperature range visualization.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">7. Explore Priority Zones</p>
+                    <p className="font-semibold text-slate-900 mb-1">6. Explore Priority Zones</p>
                     <p>Click on any priority zone to open it in Google Maps. This shows the exact location where tree planting would have the most impact.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">8. Download Map (Optional)</p>
+                    <p className="font-semibold text-slate-900 mb-1">7. Download Map (Optional)</p>
                     <p>Click "Download" to save the heat map as an HTML file. You can share this with others or use it in presentations.</p>
                   </div>
                 </div>
