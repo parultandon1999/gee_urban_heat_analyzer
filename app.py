@@ -55,31 +55,40 @@ def authenticate_gee(project_id):
     try:
         ee.Initialize()
         print("Google Earth Engine already initialized")
+        return True
     except Exception as e:
-        try:
-            print("Attempting to authenticate Google Earth Engine with service account...")
-            
-            # Try to use service account credentials from environment
-            service_account_json = os.getenv("GEE_SERVICE_ACCOUNT_JSON")
-            
-            if service_account_json:
-                # Service account authentication (for production/Render)
+        print(f"Initial initialization failed: {e}")
+        
+    try:
+        print("Attempting to authenticate Google Earth Engine with service account...")
+        
+        # Try to use service account credentials from environment
+        service_account_json = os.getenv("GEE_SERVICE_ACCOUNT_JSON")
+        
+        if service_account_json:
+            print("Found GEE_SERVICE_ACCOUNT_JSON environment variable")
+            try:
                 import json
-                credentials_dict = json.loads(service_account_json)
                 credentials = ee.ServiceAccountCredentials.from_string(service_account_json)
                 ee.Initialize(credentials, project=project_id)
                 print("Successfully authenticated to Google Earth Engine with service account")
-            else:
-                # Try default credentials (local development)
-                print("No service account found, trying default credentials...")
-                ee.Initialize(project=project_id)
-                print("Successfully authenticated to Google Earth Engine with default credentials")
+                return True
+            except json.JSONDecodeError as je:
+                print(f"JSON decode error in service account: {je}")
+                raise
+            except Exception as se:
+                print(f"Service account authentication error: {se}")
+                raise
+        else:
+            print("No GEE_SERVICE_ACCOUNT_JSON found in environment variables")
+            print("Available env vars:", [k for k in os.environ.keys() if 'GEE' in k or 'GOOGLE' in k])
+            raise RuntimeError("GEE_SERVICE_ACCOUNT_JSON not set in environment")
                 
-        except Exception as auth_error:
-            print(f"GEE authentication failed: {auth_error}")
-            import traceback
-            traceback.print_exc()
-            raise RuntimeError(f"Failed to authenticate with GEE: {auth_error}")
+    except Exception as auth_error:
+        print(f"GEE authentication failed: {auth_error}")
+        import traceback
+        traceback.print_exc()
+        raise RuntimeError(f"Failed to authenticate with GEE: {auth_error}")
 
 try:
     authenticate_gee(GEE_PROJECT_ID)
