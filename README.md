@@ -28,19 +28,6 @@ Prerequisites
 - Google Earth Engine account with project ID
 - Google Cloud credentials
 
-Installation
-
-1. Clone the repository
-2. Install backend dependencies: pip install -r requirements.txt
-3. Install frontend dependencies: npm install
-4. Set up environment variables in .env with your GEE_PROJECT_ID
-5. Authenticate with Google Earth Engine: earthengine authenticate
-
-Running
-
-Backend: python app.py (runs on http://localhost:5000)
-Frontend: npm start (runs on http://localhost:3000)
-
 Usage
 
 1. Enter location coordinates (latitude, longitude) or city name
@@ -50,15 +37,6 @@ Usage
 5. Click Analyze to start processing
 6. View results on the interactive map and priority zones list
 7. Download the map as HTML file
-
-API Endpoints
-
-POST /api/analyze - Start heat island analysis
-GET /api/logs/<session_id> - Stream analysis logs (Server-Sent Events)
-GET /api/analysis-result/<session_id> - Get final analysis results
-GET /api/parameters - Get default parameters
-GET /api/download-map/<filename> - Download generated map
-GET /api/health - Health check
 
 Configuration
 
