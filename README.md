@@ -30,7 +30,7 @@ Prerequisites
 
 Usage
 
-1. Enter location coordinates (latitude, longitude) or city name
+1. Enter location coordinates (latitude, longitude)
 2. Select analysis period (minimum 7 days, maximum 365 days)
 3. Choose satellite dataset (default: Landsat 9)
 4. Adjust thresholds for cloud cover, temperature, and vegetation
