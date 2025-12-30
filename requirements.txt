@@ -10,3 +10,5 @@ gunicorn
 requests
 numpy
 pandas
+google-auth>=2.0.0
+google-auth-oauthlib>=0.7.0

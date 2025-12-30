@@ -69,7 +69,17 @@ def authenticate_gee(project_id):
             print("Found GEE_SERVICE_ACCOUNT_JSON environment variable")
             try:
                 import json
-                credentials = ee.ServiceAccountCredentials.from_string(service_account_json)
+                from google.oauth2 import service_account
+                
+                # Parse the JSON string
+                credentials_dict = json.loads(service_account_json)
+                
+                # Create credentials from the dict
+                credentials = service_account.Credentials.from_service_account_info(
+                    credentials_dict,
+                    scopes=['https://www.googleapis.com/auth/earthengine']
+                )
+                
                 ee.Initialize(credentials, project=project_id)
                 print("Successfully authenticated to Google Earth Engine with service account")
                 return True
