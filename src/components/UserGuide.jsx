@@ -73,7 +73,57 @@ const UserGuide = () => {
                 </ul>
               </section>
 
-              {/* How This Tool Works */}
+              {/* Location Search Feature */}
+              <section>
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">Location Search</h3>
+                <p className="text-sm text-slate-700 leading-relaxed mb-2">
+                  The tool includes an intelligent location search feature powered by OpenStreetMap. You can:
+                </p>
+                <ul className="text-sm text-slate-700 space-y-2">
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>Search by city name:</strong> Type a city name and select from suggestions (e.g., "New York", "London", "Tokyo")</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>Manual coordinates:</strong> Enter latitude and longitude directly if you know them</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>Auto-complete:</strong> Search results appear as you type with debounced search for performance</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>Location name display:</strong> Selected location name appears in the search bar for reference</span>
+                  </li>
+                </ul>
+              </section>
+
+              {/* Analysis History Feature */}
+              <section>
+                <h3 className="text-lg font-semibold text-slate-900 mb-2">Analysis History</h3>
+                <p className="text-sm text-slate-700 leading-relaxed mb-2">
+                  All your analyses are automatically saved to your browser. You can:
+                </p>
+                <ul className="text-sm text-slate-700 space-y-2">
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>View past analyses:</strong> Click "History" button to see all previous analyses</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>Reload analysis:</strong> Click any past analysis to reload all parameters and results instantly</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>Download history:</strong> Track all downloaded maps with timestamps and locations</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>Delete records:</strong> Remove individual analyses or clear entire history</span>
+                  </li>
+                </ul>
+              </section>
               <section>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">How This Tool Works</h3>
                 <div className="space-y-3 text-sm text-slate-700">
@@ -135,37 +185,45 @@ const UserGuide = () => {
                 </div>
               </section>
 
-              {/* How to Use */}
+              {/* Step-by-Step Usage */}
               <section>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">Step-by-Step Usage</h3>
                 <div className="space-y-3 text-sm text-slate-700">
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">1. Enter Location Details</p>
-                    <p>Fill in the city name and coordinates. You can find coordinates on Google Maps by right-clicking and selecting the coordinates.</p>
+                    <p className="font-semibold text-slate-900 mb-1">1. Search for Location</p>
+                    <p>Use the search bar to find your city. Type the city name and select from suggestions. Alternatively, enter latitude and longitude manually. The location name will display in the search bar once selected.</p>
                   </div>
                   <div>
                     <p className="font-semibold text-slate-900 mb-1">2. Set Analysis Period</p>
-                    <p>Choose start and end dates. For best results, use summer months when heat islands are most pronounced.</p>
+                    <p>Choose start and end dates. For best results, use summer months (May-August) when heat islands are most pronounced. Minimum 7 days, maximum 365 days.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">3. Adjust Thresholds (Optional)</p>
+                    <p className="font-semibold text-slate-900 mb-1">3. Choose Dataset (Optional)</p>
+                    <p>Select which satellite dataset to use. Default is Landsat 9 (recommended). You can try different datasets to see which works best for your area.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-900 mb-1">4. Adjust Thresholds (Optional)</p>
                     <p>Modify cloud cover, hot threshold, and vegetation threshold if needed. Default values work well for most cases. Lower hot threshold = more areas flagged as needing trees.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">4. Click Analyze</p>
-                    <p>Click the green "Analyze" button. The tool will process satellite data and show real-time progress in the logs panel. Analysis typically takes 2-10 minutes depending on area size.</p>
+                    <p className="font-semibold text-slate-900 mb-1">5. Click Analyze</p>
+                    <p>Click the green "Analyze" button. Real-time logs will show analysis progress. Analysis typically takes 2-10 minutes depending on area size and date range.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">5. View Results</p>
-                    <p>Once complete, you'll see: a heat map showing temperature distribution, summary statistics, priority zones list, and temperature range visualization.</p>
+                    <p className="font-semibold text-slate-900 mb-1">6. View Results</p>
+                    <p>Once complete, you'll see: an interactive heat map, summary statistics (hotspots, zones, temperatures), priority zones list, and temperature range visualization.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">6. Explore Priority Zones</p>
+                    <p className="font-semibold text-slate-900 mb-1">7. Explore Priority Zones</p>
                     <p>Click on any priority zone to open it in Google Maps. This shows the exact location where tree planting would have the most impact.</p>
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900 mb-1">7. Download Map (Optional)</p>
-                    <p>Click "Download" to save the heat map as an HTML file. You can share this with others or use it in presentations.</p>
+                    <p className="font-semibold text-slate-900 mb-1">8. Download Map (Optional)</p>
+                    <p>Click "Download" to save the heat map as an HTML file. You can share this with others or use it in presentations. Download history is automatically tracked.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-slate-900 mb-1">9. Save to History</p>
+                    <p>Your analysis is automatically saved to browser history. Click "History" button to view and reload any past analysis instantly.</p>
                   </div>
                 </div>
               </section>
@@ -179,12 +237,16 @@ const UserGuide = () => {
                     <p><strong>Hotspots:</strong> Number of pixels identified as needing trees. <strong>Zones:</strong> Number of priority clusters. <strong>Avg Temp:</strong> Average temperature across the area. <strong>Max Temp:</strong> Highest temperature found.</p>
                   </div>
                   <div>
+                    <p className="font-semibold text-slate-900 mb-1">Heat Map</p>
+                    <p>Interactive map showing temperature distribution. On desktop, location name displays at the top. On mobile, location name displays in the configuration panel for better space usage. Red markers show hotspot candidates, green markers show priority zones.</p>
+                  </div>
+                  <div>
                     <p className="font-semibold text-slate-900 mb-1">Heat Map Colors</p>
                     <p><strong>Red:</strong> Hottest areas with no vegetation - highest priority for planting. <strong>Orange:</strong> Hot areas - good for planting. <strong>Yellow:</strong> Warm areas with some vegetation. <strong>Green:</strong> Cool areas with good vegetation. <strong>Blue:</strong> Coolest areas (water/forests).</p>
                   </div>
                   <div>
                     <p className="font-semibold text-slate-900 mb-1">Priority Zones</p>
-                    <p>Each zone shows: Zone ID, center coordinates, average temperature, and number of hotspot pixels. Zones are ranked by impact - top zones have the highest temperature and lowest vegetation.</p>
+                    <p>Each zone shows: Zone ID, center coordinates, average temperature, and number of hotspot pixels. Zones are ranked by impact - top zones have the highest temperature and lowest vegetation. Click any zone to open in Google Maps.</p>
                   </div>
                   <div>
                     <p className="font-semibold text-slate-900 mb-1">Temperature Range</p>
@@ -256,6 +318,18 @@ const UserGuide = () => {
                   <li className="flex gap-2">
                     <span className="text-green-600 font-bold">•</span>
                     <span><strong>Compare over time:</strong> Run analysis for different years to see how urban heat changes.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>Use search feature:</strong> The location search makes it easy to find cities without manual coordinate lookup.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>Check history:</strong> Use analysis history to quickly compare results across different locations or time periods.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-green-600 font-bold">•</span>
+                    <span><strong>Mobile friendly:</strong> The tool works on mobile devices - location name displays in the configuration panel on small screens.</span>
                   </li>
                 </ul>
               </section>

@@ -20,6 +20,7 @@ const UrbanHeatAnalyzer = () => {
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
   const [logs, setLogs] = useState([]);
+  const [locationName, setLocationName] = useState('');
   const mapContainerRef = useRef(null);
 
   // Load analysis from history
@@ -63,12 +64,16 @@ const UrbanHeatAnalyzer = () => {
             logs={logs}
             setLogs={setLogs}
             setResults={setResults}
+            locationName={locationName}
+            setLocationName={setLocationName}
           />
           <ResultsPanel 
             results={results} 
             analyzing={analyzing} 
             mapContainerRef={mapContainerRef}
             formData={formData}
+            locationName={locationName}
+            setLocationName={setLocationName}
           />
         </div>
       </main>

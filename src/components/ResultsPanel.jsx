@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import FullScreenMap from './FullScreenMap.jsx'
-import { Locate, Thermometer, Leaf, Download, ExternalLink } from 'lucide-react';
+import { Locate, Thermometer, Leaf, Download, ExternalLink, MapPinned } from 'lucide-react';
 import { downloadMap, getLocationName } from '../services/api.js';
 
-const ResultsPanel = ({results, analyzing, mapContainerRef, formData}) => {
+const ResultsPanel = ({results, analyzing, mapContainerRef, formData, locationName, setLocationName}) => {
   const [fullscreenMap, setFullscreenMap] = useState(false);
   const [error, setError] = useState(null);
-  const [locationName, setLocationName] = useState('');
 
   // Fetch location name when coordinates change
   useEffect(() => {
@@ -23,7 +22,7 @@ const ResultsPanel = ({results, analyzing, mapContainerRef, formData}) => {
       };
       fetchLocation();
     }
-  }, [formData?.latitude, formData?.longitude]);
+  }, [formData?.latitude, formData?.longitude, setLocationName]);
 
   // Open location in Google Maps
   const openInMaps = (lat, lon) => {
@@ -77,10 +76,11 @@ const ResultsPanel = ({results, analyzing, mapContainerRef, formData}) => {
             <div className="p-2 border-b border-slate-200 flex items-center justify-between">
               <h3 className="text-sm font-semibold text-slate-900">Heat Map</h3>
                 {locationName && (
-                  <span className="text-xs text-blue-600 px-2 py-1">
-                    {locationName}
-                  </span>
-                )}
+                <div className="hidden md:flex items-center gap-1">
+                  <MapPinned className="w-3 h-3 text-blue-600" />
+                  <span className="text-xs text-blue-600 px-2 py-1">{locationName}</span>
+                </div>
+              )}
               <div className="flex items-center gap-3">
                 <FullScreenMap results={results} fullscreenMap={fullscreenMap} setFullscreenMap={setFullscreenMap} />
                 <button 

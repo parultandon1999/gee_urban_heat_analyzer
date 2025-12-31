@@ -7,9 +7,11 @@ import {
   Leaf,
   AlertCircle,
   Loader2,
+  MapPinned,
 } from 'lucide-react';
 
 import { analyzeHeatIsland as callAnalyzeAPI, healthCheck, getLocationName } from '../services/api';
+import LocationSearch from './LocationSearch.jsx';
 
 const ConfigurationPanel = ({ 
   formData,
@@ -20,10 +22,10 @@ const ConfigurationPanel = ({
   setError, 
   logs, 
   setLogs, 
-  setResults 
+  setResults,
+  locationName,
+  setLocationName
 }) => {
-
-  const [locationName, setLocationName] = useState('');
   
   // Fetch location name when coordinates change
   const fetchLocationName = async (lat, lon) => {
@@ -53,6 +55,14 @@ const ConfigurationPanel = ({
     }
   };
 
+  const handleLocationSelect = (location) => {
+    setFormData(prev => ({
+      ...prev,
+      latitude: location.latitude.toString(),
+      longitude: location.longitude.toString()
+    }));
+  };
+
   // Analyze heat island
   const analyzeHeatIsland = async () => {
     setAnalyzing(true);
@@ -63,7 +73,7 @@ const ConfigurationPanel = ({
     try {
       const isHealthy = await healthCheck();
       if (!isHealthy) {
-        throw new Error('Backend server is not running. Start it with: python app.py');
+        throw new Error('Backend server is not running try again later.');
       }
       
       const parameters = {
@@ -141,16 +151,28 @@ const ConfigurationPanel = ({
   return (
     <div className="lg:col-span-1">
       <div className="bg-white border-slate-200 rounded-xl shadow-sm border p-3 sm:p-5">
-        <h2 className="text-base sm:text-lg font-semibold text-slate-900 mb-3">Analysis Configuration</h2>
-        
-        <div className="space-y-2">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-base sm:text-lg font-semibold text-slate-900">Analysis Configuration</h2>
+            {locationName && (
+              <div className="flex items-center gap-2 md:hidden">
+                <MapPinned className="w-4 h-4 text-blue-600" />
+                <span className="text-xs text-blue-600 font-medium truncate max-w-[140px]">
+                  {locationName}
+                </span>
+              </div>
+            )}
+          </div>
+          <div className="space-y-2">
           {/* Location Section */}
           <div>
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
               <Locate className="w-4 h-4" />
-              Location Coordinates
+              Location
             </label>
-            <div className="grid grid-cols-2 gap-2">
+            {/* Search Bar */}
+            <LocationSearch onLocationSelect={handleLocationSelect} />
+            {/* Manual Coordinate Input */}
+            <div className="grid grid-cols-2 gap-2 mt-2">
               <input
                 type="text"
                 name="latitude"

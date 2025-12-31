@@ -108,6 +108,35 @@ export const getLocationName = async (latitude, longitude) => {
   }
 };
 
+export const searchLocation = async (query) => {
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1`;
+    
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'UrbanHeatIslandAnalyzer'
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (!data || data.length === 0) {
+      return [];
+    }
+    
+    return data.map(result => ({
+      name: result.name || result.display_name.split(',')[0],
+      fullName: result.display_name,
+      latitude: parseFloat(result.lat),
+      longitude: parseFloat(result.lon),
+      type: result.type
+    }));
+  } catch (error) {
+    console.error('Location search error:', error);
+    return [];
+  }
+};
+
 // Helper function to add timeout to fetch
 const fetchWithTimeout = (url, options = {}, timeout = REQUEST_TIMEOUT) => {
   return Promise.race([
