@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useState } from 'react';
 import {
   Locate,
   Thermometer,
@@ -17,6 +17,7 @@ import LocationSearch from './LocationSearch.jsx';
 
 const Tooltip = ({ text, position = 'top' }) => {
   const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipRef = useRef(null);
 
   const positionClasses = position === 'top' 
     ? 'bottom-full mb-2' 
@@ -26,8 +27,25 @@ const Tooltip = ({ text, position = 'top' }) => {
     ? 'top-full'
     : 'bottom-full';
 
+  // Close tooltip when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (tooltipRef.current && !tooltipRef.current.contains(e.target)) {
+        setShowTooltip(false);
+      }
+    };
+
+    if (showTooltip) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showTooltip]);
+
   return (
-    <div className="relative inline-block">
+    <div ref={tooltipRef} className="relative inline-block">
       <button
         type="button"
         onMouseEnter={() => setShowTooltip(true)}
@@ -35,7 +53,7 @@ const Tooltip = ({ text, position = 'top' }) => {
         onClick={() => setShowTooltip(!showTooltip)}
         className="text-slate-400 hover:text-slate-600 ml-1"
       >
-        <HelpCircle className="w-4 h-4" />
+        <HelpCircle className="w-3 h-3" />
       </button>
       {showTooltip && (
         <div className={`absolute left-0 w-48 bg-slate-900 text-white text-xs rounded-lg p-2 z-10 pointer-events-none ${positionClasses}`}>
@@ -46,7 +64,6 @@ const Tooltip = ({ text, position = 'top' }) => {
     </div>
   );
 };
-
 
 const ConfigurationPanel = ({ 
   formData,
