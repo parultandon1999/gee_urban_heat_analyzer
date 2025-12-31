@@ -63,70 +63,6 @@ limiter = Limiter(
 #######  YOU MUST COMMENT IT WHILE WORKING WITH LOCAL  ##########
 #################################################################
 # Initialize Earth Engine once at startup
-# def authenticate_gee(project_id):
-#     project_id = str(project_id)
-#     try:
-#         ee.Initialize()
-#         print("Google Earth Engine already initialized")
-#         return True
-#     except Exception as e:
-#         print(f"Initial initialization failed: {e}")
-        
-#     try:
-#         print("Attempting to authenticate Google Earth Engine with service account...")
-        
-#         # Try to use service account credentials from environment
-#         service_account_json = os.getenv("GEE_SERVICE_ACCOUNT_JSON")
-        
-#         if service_account_json:
-#             print("Found GEE_SERVICE_ACCOUNT_JSON environment variable")
-#             try:
-#                 import json
-#                 from google.oauth2 import service_account
-                
-#                 # Parse the JSON string
-#                 credentials_dict = json.loads(service_account_json)
-                
-#                 # Create credentials from the dict
-#                 credentials = service_account.Credentials.from_service_account_info(
-#                     credentials_dict,
-#                     scopes=['https://www.googleapis.com/auth/earthengine']
-#                 )
-                
-#                 ee.Initialize(credentials, project=project_id)
-#                 print("Successfully authenticated to Google Earth Engine with service account")
-#                 return True
-#             except json.JSONDecodeError as je:
-#                 print(f"JSON decode error in service account: {je}")
-#                 raise
-#             except Exception as se:
-#                 print(f"Service account authentication error: {se}")
-#                 raise
-#         else:
-#             print("No GEE_SERVICE_ACCOUNT_JSON found in environment variables")
-#             print("Available env vars:", [k for k in os.environ.keys() if 'GEE' in k or 'GOOGLE' in k])
-#             raise RuntimeError("GEE_SERVICE_ACCOUNT_JSON not set in environment")
-                
-#     except Exception as auth_error:
-#         print(f"GEE authentication failed: {auth_error}")
-#         import traceback
-#         traceback.print_exc()
-#         raise RuntimeError(f"Failed to authenticate with GEE: {auth_error}")
-
-# try:
-#     authenticate_gee(GEE_PROJECT_ID)
-#     GEE_INITIALIZED = True
-# except Exception as e:
-#     print(f"GEE authentication failed at startup: {e}\n")
-#     GEE_INITIALIZED = False
-
-
-#######################################################################
-#######  THIS AUTHENTICATION IS FOR PC LOCAL SERVER     ###############
-#######  YOU MUST COMMENT IT WHILE WORKING WITH DEPLOYEMENT  ##########
-#######################################################################
-
-# # Initialize Earth Engine once at startup
 def authenticate_gee(project_id):
     project_id = str(project_id)
     try:
@@ -137,11 +73,40 @@ def authenticate_gee(project_id):
         print(f"Initial initialization failed: {e}")
         
     try:
-        print("Attempting to authenticate Google Earth Engine...")
-        ee.Authenticate()
-        ee.Initialize(project=project_id)
-        print("Successfully authenticated to Google Earth Engine")
-        return True
+        print("Attempting to authenticate Google Earth Engine with service account...")
+        
+        # Try to use service account credentials from environment
+        service_account_json = os.getenv("GEE_SERVICE_ACCOUNT_JSON")
+        
+        if service_account_json:
+            print("Found GEE_SERVICE_ACCOUNT_JSON environment variable")
+            try:
+                import json
+                from google.oauth2 import service_account
+                
+                # Parse the JSON string
+                credentials_dict = json.loads(service_account_json)
+                
+                # Create credentials from the dict
+                credentials = service_account.Credentials.from_service_account_info(
+                    credentials_dict,
+                    scopes=['https://www.googleapis.com/auth/earthengine']
+                )
+                
+                ee.Initialize(credentials, project=project_id)
+                print("Successfully authenticated to Google Earth Engine with service account")
+                return True
+            except json.JSONDecodeError as je:
+                print(f"JSON decode error in service account: {je}")
+                raise
+            except Exception as se:
+                print(f"Service account authentication error: {se}")
+                raise
+        else:
+            print("No GEE_SERVICE_ACCOUNT_JSON found in environment variables")
+            print("Available env vars:", [k for k in os.environ.keys() if 'GEE' in k or 'GOOGLE' in k])
+            raise RuntimeError("GEE_SERVICE_ACCOUNT_JSON not set in environment")
+                
     except Exception as auth_error:
         print(f"GEE authentication failed: {auth_error}")
         import traceback
@@ -154,6 +119,41 @@ try:
 except Exception as e:
     print(f"GEE authentication failed at startup: {e}\n")
     GEE_INITIALIZED = False
+
+
+#######################################################################
+#######  THIS AUTHENTICATION IS FOR PC LOCAL SERVER     ###############
+#######  YOU MUST COMMENT IT WHILE WORKING WITH DEPLOYEMENT  ##########
+#######################################################################
+
+# # Initialize Earth Engine once at startup
+# def authenticate_gee(project_id):
+#     project_id = str(project_id)
+#     try:
+#         ee.Initialize()
+#         print("Google Earth Engine already initialized")
+#         return True
+#     except Exception as e:
+#         print(f"Initial initialization failed: {e}")
+        
+#     try:
+#         print("Attempting to authenticate Google Earth Engine...")
+#         ee.Authenticate()
+#         ee.Initialize(project=project_id)
+#         print("Successfully authenticated to Google Earth Engine")
+#         return True
+#     except Exception as auth_error:
+#         print(f"GEE authentication failed: {auth_error}")
+#         import traceback
+#         traceback.print_exc()
+#         raise RuntimeError(f"Failed to authenticate with GEE: {auth_error}")
+
+# try:
+#     authenticate_gee(GEE_PROJECT_ID)
+#     GEE_INITIALIZED = True
+# except Exception as e:
+#     print(f"GEE authentication failed at startup: {e}\n")
+#     GEE_INITIALIZED = False
 
 def validate_coordinates(latitude, longitude):
     if not (-90 <= latitude <= 90):
