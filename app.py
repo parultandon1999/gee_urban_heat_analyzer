@@ -318,7 +318,6 @@ def health_check():
 @app.route('/api/analyze', methods=['POST'])
 @limiter.limit("50 per minute")
 def analyze_heat_island():
-    """Start analysis and return session ID for log streaming"""
     try:
         if not GEE_INITIALIZED:
             return jsonify({
@@ -403,9 +402,17 @@ def analyze_heat_island():
         return jsonify({'error': 'Internal server error during analysis.'}), 500
 
 
-def _run_analysis(session_id, latitude, longitude, start_date, end_date, 
-                  cloud_cover, hot_threshold, veg_threshold, dataset):
-    """Run analysis in background and stream logs"""
+def _run_analysis(
+    session_id,
+    latitude,
+    longitude,
+    start_date,
+    end_date, 
+    cloud_cover,
+    hot_threshold,
+    veg_threshold,
+    dataset
+):
     try:
         stream_log(session_id, "Starting analysis...")
         stream_log(session_id, f"Processing analysis for (lat: {latitude}, lon: {longitude})...")
@@ -581,7 +588,6 @@ def _run_analysis(session_id, latitude, longitude, start_date, end_date,
 
 @app.route('/api/logs/<session_id>')
 def stream_logs(session_id):
-    """Stream logs for a specific analysis session using Server-Sent Events"""
     def generate():
         sent_logs = set()
         
@@ -638,7 +644,6 @@ def stream_logs(session_id):
 
 @app.route('/api/analysis-result/<session_id>')
 def get_analysis_result(session_id):
-    """Get the final result of an analysis"""
     with sessions_lock:
         if session_id not in analysis_sessions:
             return jsonify({'error': 'Session not found'}), 404
@@ -711,5 +716,3 @@ def internal_error(error):
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
-# Don't use app.run() - let gunicorn handle it in production
-# For local development, run: python app.py or flask run

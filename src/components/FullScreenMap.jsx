@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { Maximize2 } from 'lucide-react';
 
-const FullScreenMap = ({ results, fullscreenMap, setFullscreenMap }) => {
+const FullScreenMap = ({ results, fullscreenMap, setFullscreenMap, locationName }) => {
   const fullscreenMapRef = useRef(null);
 
   useEffect(() => {
@@ -61,7 +61,11 @@ const FullScreenMap = ({ results, fullscreenMap, setFullscreenMap }) => {
           `}</style>
           <div className="bg-white rounded-none sm:rounded-xl w-full h-full sm:w-full sm:max-w-6xl sm:max-h-screen sm:rounded-xl flex flex-col sm:m-auto">
             <div className="sticky top-0 z-10 p-3 sm:p-4 border-b border-slate-200 flex items-center justify-between bg-white flex-shrink-0">
-              <h3 className="text-base sm:text-lg font-semibold text-slate-900 truncate flex-1">Heat Map - Fullscreen</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-slate-900 truncate flex-1">Heat Map -
+              {locationName && (
+                <span className="text-xs text-blue-600 px-2 py-1">{locationName}</span>
+              )}
+              </h3>
               <button 
                 onClick={() => setFullscreenMap(false)}
                 className="text-slate-500 hover:text-slate-700 text-2xl sm:text-3xl flex-shrink-0 ml-2"

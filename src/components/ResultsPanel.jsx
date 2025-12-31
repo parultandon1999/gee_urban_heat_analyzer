@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import FullScreenMap from './FullScreenMap.jsx'
 import { Locate, Thermometer, Leaf, Download, ExternalLink, MapPinned } from 'lucide-react';
 import { downloadMap, getLocationName } from '../services/api.js';
+import FullScreenMap from './FullScreenMap.jsx'
 
 const ResultsPanel = ({results, analyzing, mapContainerRef, formData, locationName, setLocationName}) => {
   const [fullscreenMap, setFullscreenMap] = useState(false);
@@ -17,7 +17,7 @@ const ResultsPanel = ({results, analyzing, mapContainerRef, formData, locationNa
       };
       fetchLocation();
     }
-  }, [formData?.latitude, formData?.longitude, setLocationName, results?.mapContainerRef, mapContainerRef]);
+  }, [formData?.latitude, formData?.longitude, setLocationName]);
 
   // Open location in Google Maps
   const openInMaps = (lat, lon) => {
@@ -54,7 +54,7 @@ const ResultsPanel = ({results, analyzing, mapContainerRef, formData, locationNa
     if (results?.mapHtml && mapContainerRef.current) {
       mapContainerRef.current.innerHTML = results.mapHtml;
     }
-  }, [results?.mapHtml]);
+  }, [results?.mapHtml, mapContainerRef]);
 
   return(
     <>
@@ -72,7 +72,7 @@ const ResultsPanel = ({results, analyzing, mapContainerRef, formData, locationNa
                 </div>
               )}
               <div className="flex items-center gap-3">
-                <FullScreenMap results={results} fullscreenMap={fullscreenMap} setFullscreenMap={setFullscreenMap} />
+                <FullScreenMap results={results} fullscreenMap={fullscreenMap} setFullscreenMap={setFullscreenMap} locationName={locationName} />
                 <button 
                   onClick={handleDownloadMap}
                   disabled={!results?.mapFileName}

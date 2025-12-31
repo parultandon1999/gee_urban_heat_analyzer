@@ -12,3 +12,4 @@ numpy
 pandas
 google-auth
 google-auth-oauthlib
+Werkzeug
