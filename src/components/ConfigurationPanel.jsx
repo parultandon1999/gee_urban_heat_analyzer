@@ -14,7 +14,6 @@ import {
 import { analyzeHeatIsland as callAnalyzeAPI, healthCheck, getLocationName } from '../services/api';
 import LocationSearch from './LocationSearch.jsx';
 
-
 const Tooltip = ({ text, position = 'top' }) => {
   const [showTooltip, setShowTooltip] = useState(false);
   const tooltipRef = useRef(null);
