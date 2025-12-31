@@ -67,7 +67,7 @@ const LocationSearch = ({ onLocationSelect, currentLocation }) => {
   };
 
   const handleClear = () => {
-    setSearchQuery(false);
+    setSearchQuery("");
     setSuggestions([]);
     setShowDropdown(false);
     setIsLoading(false);
