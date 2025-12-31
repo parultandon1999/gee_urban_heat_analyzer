@@ -51,7 +51,7 @@ const Tooltip = ({ text, position = 'top' }) => {
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
         onClick={() => setShowTooltip(!showTooltip)}
-        className="text-slate-400 hover:text-slate-600 ml-1"
+        className="text-slate-400 hover:text-slate-600 ml-1 pointer-events-auto"
       >
         <HelpCircle className="text-gray-500 w-2.5 h-2.5" />
       </button>
@@ -217,11 +217,16 @@ const ConfigurationPanel = ({
           {/* Location Section */}
           <div>
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
-                <Locate className="w-4 h-4" />
-                Location
-                <Tooltip position="bottom" text="Enter the city name or coordinates (latitude, longitude) of the area you want to analyze." />
-              </label>
+              <div className="flex items-center gap-2 mb-2">
+                <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                  <Locate className="w-4 h-4" />
+                  <span>Location</span>
+                </label>
+                <Tooltip
+                  position="bottom"
+                  text="Enter the city name or coordinates (latitude, longitude) of the area you want to analyze."
+                />
+              </div>
             </div>
             {/* Search Bar */}
             <LocationSearch onLocationSelect={handleLocationSelect} />
@@ -250,7 +255,7 @@ const ConfigurationPanel = ({
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
               <Cloud className="w-4 h-4" />
               Dataset
-              <Tooltip text="Landsat 9: Latest thermal data, 30m resolution (recommended). Landsat 8: Historical thermal data, 30m resolution. Landsat 7: Older data, 30m resolution. Sentinel-2: High resolution 10m, no thermal data. MODIS: 1km resolution, global coverage." />
+              <Tooltip text="Landsat 9: Latest thermal data, 30m resolution (recommended). Landsat 8: Historical thermal data, 30m resolution. Landsat 7: Older data, 30m resolution." />
             </label>
             <select
               name="dataset"
