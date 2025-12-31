@@ -219,7 +219,7 @@ const ConfigurationPanel = ({
               <div className="flex items-center gap-2 mb-2">
                 <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
                   <Locate className="w-4 h-4" />
-                  <span>Location</span>
+                  Location
                 </label>
                 <Tooltip
                   position="bottom"
@@ -251,11 +251,13 @@ const ConfigurationPanel = ({
           </div>
           {/* Dataset */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
-              <Cloud className="w-4 h-4" />
-              Dataset
-              <Tooltip text="Landsat 9: Latest thermal data, 30m resolution (recommended). Landsat 8: Historical thermal data, 30m resolution. Landsat 7: Older data, 30m resolution." />
-            </label>
+            <div className="flex items-center gap-2 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mt-2">
+                <Cloud className="w-4 h-4" />
+                Dataset
+                <Tooltip text="Landsat 9: Latest thermal data, 30m resolution (recommended). Landsat 8: Historical thermal data, 30m resolution. Landsat 7: Older data, 30m resolution." />
+              </label>
+            </div>
             <select
               name="dataset"
               value={formData.dataset}
@@ -275,11 +277,13 @@ const ConfigurationPanel = ({
           </div>
           {/* Date Range */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
-              <Calendar className="w-4 h-4" />
-              Analysis Period
-              <Tooltip text="Select 7-365 days. Summer months (May-August) show clearest heat island patterns." />
-            </label>
+            <div className="flex items-center gap-2 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mt-2">
+                <Calendar className="w-4 h-4" />
+                Analysis Period
+                <Tooltip text="Select 7-365 days. Summer months (May-August) show clearest heat island patterns." />
+              </label>
+            </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="relative">
                 <input
@@ -304,11 +308,13 @@ const ConfigurationPanel = ({
 
           {/* Cloud Cover Threshold */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
-              <Cloud className="w-4 h-4" />
-              Cloud Cover Threshold (%)
-              <Tooltip text="Filter out cloudy images (0-100%). Lower = clearer images. Recommended: 10-20%." />
-            </label>
+            <div className="flex items-center gap-2 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mt-2">
+                <Cloud className="w-4 h-4" />
+                Cloud Cover Threshold (%)
+                <Tooltip text="Filter out cloudy images (0-100%). Lower = clearer images. Recommended: 10-20%." />
+              </label>
+            </div>
             <input
               type="number"
               name="cloudCover"
@@ -320,11 +326,13 @@ const ConfigurationPanel = ({
 
           {/* Hot Threshold */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
-              <Thermometer className="w-4 h-4" />
-              Hot Threshold (°C)
-              <Tooltip text="Temperature above which areas are flagged as needing trees (0-60°C). Recommended: 35-40°C." />
-            </label>
+            <div className="flex items-center gap-2 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mt-2">
+                <Thermometer className="w-4 h-4" />
+                Hot Threshold (°C)
+                <Tooltip text="Temperature above which areas are flagged as needing trees (0-60°C). Recommended: 35-40°C." />
+              </label>
+            </div>
             <input
               type="number"
               name="hotThreshold"
@@ -336,11 +344,13 @@ const ConfigurationPanel = ({
 
           {/* Vegetation Threshold */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
-              <Leaf className="w-4 h-4" />
-              Vegetation Threshold (NDVI)
-              <Tooltip text="NDVI value below which areas lack vegetation (0-1). Lower = less vegetation. Recommended: 0.2-0.3." />
-            </label>
+            <div className="flex items-center gap-2 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mt-2">
+                <Leaf className="w-4 h-4" />
+                Vegetation Threshold (NDVI)
+                <Tooltip text="NDVI value below which areas lack vegetation (0-1). Lower = less vegetation. Recommended: 0.2-0.3." />
+              </label>
+            </div>
             <input
               type="number"
               step="0.1"
