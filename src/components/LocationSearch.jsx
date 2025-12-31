@@ -61,6 +61,7 @@ const LocationSearch = ({ onLocationSelect, currentLocation }) => {
     });
     debounceTimer.current = 'SELECTED';
     setSearchQuery(location.name);
+    setIsLoading(false)
     setShowDropdown(false);
   };
 
@@ -68,6 +69,7 @@ const LocationSearch = ({ onLocationSelect, currentLocation }) => {
     setSearchQuery('');
     setSuggestions([]);
     setShowDropdown(false);
+    setIsLoading(false)
   };
 
   return (

@@ -8,10 +8,45 @@ import {
   AlertCircle,
   Loader2,
   MapPinned,
+  HelpCircle
 } from 'lucide-react';
 
 import { analyzeHeatIsland as callAnalyzeAPI, healthCheck, getLocationName } from '../services/api';
 import LocationSearch from './LocationSearch.jsx';
+
+
+const Tooltip = ({ text, position = 'top' }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const positionClasses = position === 'top' 
+    ? 'bottom-full mb-2' 
+    : 'top-full mt-2';
+
+  const arrowClasses = position === 'top'
+    ? 'top-full'
+    : 'bottom-full';
+
+  return (
+    <div className="relative inline-block">
+      <button
+        type="button"
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+        onClick={() => setShowTooltip(!showTooltip)}
+        className="text-slate-400 hover:text-slate-600 ml-1"
+      >
+        <HelpCircle className="w-4 h-4" />
+      </button>
+      {showTooltip && (
+        <div className={`absolute left-0 w-48 bg-slate-900 text-white text-xs rounded-lg p-2 z-10 pointer-events-none ${positionClasses}`}>
+          {text}
+          <div className={`absolute left-2 w-2 h-2 bg-slate-900 transform rotate-45 ${arrowClasses}`}></div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 
 const ConfigurationPanel = ({ 
   formData,
@@ -147,7 +182,6 @@ const ConfigurationPanel = ({
     }
   };
 
-
   return (
     <div className="lg:col-span-1">
       <div className="bg-white border-slate-200 rounded-xl shadow-sm border p-3 sm:p-5">
@@ -168,6 +202,7 @@ const ConfigurationPanel = ({
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
               <Locate className="w-4 h-4" />
               Location
+              <Tooltip position="bottom" text="Enter the city name or coordinates (latitude, longitude) of the area you want to analyze." />
             </label>
             {/* Search Bar */}
             <LocationSearch onLocationSelect={handleLocationSelect} />
@@ -196,22 +231,25 @@ const ConfigurationPanel = ({
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
               <Cloud className="w-4 h-4" />
               Dataset
+              <Tooltip text="Landsat 9: Latest thermal data, 30m resolution (recommended). Landsat 8: Historical thermal data, 30m resolution. Landsat 7: Older data, 30m resolution." />
             </label>
-            <input
-              type="text"
+            <select
               name="dataset"
               value={formData.dataset}
               onChange={handleInputChange}
-              placeholder="e.g., LANDSAT/LC09/C02/T1_L2"
               className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-xs"
-            />
+            >
+              <option value="LANDSAT/LC09/C02/T1_L2">LANDSAT/LC09/C02/T1_L2</option>
+              <option value="LANDSAT/LC08/C02/T1_L2">LANDSAT/LC08/C02/T1_L2</option>
+              <option value="LANDSAT/LE07/C02/T1_L2">LANDSAT/LE07/C02/T1_L2</option>
+            </select>
           </div>
-
           {/* Date Range */}
           <div>
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
               <Calendar className="w-4 h-4" />
               Analysis Period
+              <Tooltip text="Select 7-365 days. Summer months (May-August) show clearest heat island patterns." />
             </label>
             <div className="grid grid-cols-2 gap-2">
               <input
@@ -236,6 +274,7 @@ const ConfigurationPanel = ({
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
               <Cloud className="w-4 h-4" />
               Cloud Cover Threshold (%)
+              <Tooltip text="Filter out cloudy images (0-100%). Lower = clearer images. Recommended: 10-20%." />
             </label>
             <input
               type="number"
@@ -251,6 +290,7 @@ const ConfigurationPanel = ({
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
               <Thermometer className="w-4 h-4" />
               Hot Threshold (°C)
+              <Tooltip text="Temperature above which areas are flagged as needing trees (0-60°C). Recommended: 35-40°C." />
             </label>
             <input
               type="number"
@@ -266,6 +306,7 @@ const ConfigurationPanel = ({
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
               <Leaf className="w-4 h-4" />
               Vegetation Threshold (NDVI)
+              <Tooltip text="NDVI value below which areas lack vegetation (0-1). Lower = less vegetation. Recommended: 0.2-0.3." />
             </label>
             <input
               type="number"
