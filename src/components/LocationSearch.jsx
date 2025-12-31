@@ -21,7 +21,7 @@ const LocationSearch = ({ onLocationSelect, currentLocation }) => {
       return;
     }
 
-    if (searchQuery.trim().length < 2) {
+    if (!searchQuery || typeof searchQuery !== 'string' || searchQuery.trim().length < 2) {
       setSuggestions([]);
       setIsLoading(false);
       return;
