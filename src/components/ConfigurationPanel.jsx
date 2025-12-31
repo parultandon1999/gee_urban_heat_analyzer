@@ -1,4 +1,4 @@
-import { useState, useRef, useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Locate,
   Thermometer,
@@ -53,7 +53,7 @@ const Tooltip = ({ text, position = 'top' }) => {
         onClick={() => setShowTooltip(!showTooltip)}
         className="text-slate-400 hover:text-slate-600 ml-1"
       >
-        <HelpCircle className="w-3 h-3" />
+        <HelpCircle className="text-gray-500 w-2.5 h-2.5" />
       </button>
       {showTooltip && (
         <div className={`absolute left-0 w-48 bg-slate-900 text-white text-xs rounded-lg p-2 z-10 pointer-events-none ${positionClasses}`}>
@@ -216,11 +216,13 @@ const ConfigurationPanel = ({
           <div className="space-y-2">
           {/* Location Section */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
-              <Locate className="w-4 h-4" />
-              Location
-              <Tooltip position="bottom" text="Enter the city name or coordinates (latitude, longitude) of the area you want to analyze." />
-            </label>
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
+                <Locate className="w-4 h-4" />
+                Location
+                <Tooltip position="bottom" text="Enter the city name or coordinates (latitude, longitude) of the area you want to analyze." />
+              </label>
+            </div>
             {/* Search Bar */}
             <LocationSearch onLocationSelect={handleLocationSelect} />
             {/* Manual Coordinate Input */}
@@ -248,13 +250,19 @@ const ConfigurationPanel = ({
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">
               <Cloud className="w-4 h-4" />
               Dataset
-              <Tooltip text="Landsat 9: Latest thermal data, 30m resolution (recommended). Landsat 8: Historical thermal data, 30m resolution. Landsat 7: Older data, 30m resolution." />
+              <Tooltip text="Landsat 9: Latest thermal data, 30m resolution (recommended). Landsat 8: Historical thermal data, 30m resolution. Landsat 7: Older data, 30m resolution. Sentinel-2: High resolution 10m, no thermal data. MODIS: 1km resolution, global coverage." />
             </label>
             <select
               name="dataset"
               value={formData.dataset}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-xs"
+              className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-xs bg-slate-50 hover:bg-white transition-colors appearance-none cursor-pointer"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 8px center',
+                paddingRight: '28px'
+              }}
             >
               <option value="LANDSAT/LC09/C02/T1_L2">LANDSAT/LC09/C02/T1_L2</option>
               <option value="LANDSAT/LC08/C02/T1_L2">LANDSAT/LC08/C02/T1_L2</option>
@@ -269,20 +277,24 @@ const ConfigurationPanel = ({
               <Tooltip text="Select 7-365 days. Summer months (May-August) show clearest heat island patterns." />
             </label>
             <div className="grid grid-cols-2 gap-2">
-              <input
-                type="date"
-                name="startDate"
-                value={formData.startDate}
-                onChange={handleInputChange}
-                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-xs"
-              />
-              <input
-                type="date"
-                name="endDate"
-                value={formData.endDate}
-                onChange={handleInputChange}
-                className="px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-xs"
-              />
+              <div className="relative">
+                <input
+                  type="date"
+                  name="startDate"
+                  value={formData.startDate}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-xs bg-slate-50 hover:bg-white transition-colors"
+                />
+              </div>
+              <div className="relative">
+                <input
+                  type="date"
+                  name="endDate"
+                  value={formData.endDate}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none text-xs bg-slate-50 hover:bg-white transition-colors"
+                />
+              </div>
             </div>
           </div>
 
