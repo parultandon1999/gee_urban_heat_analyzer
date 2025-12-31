@@ -1,25 +1,61 @@
 import { useState, useRef, useEffect } from 'react';
 import FullScreenMap from './FullScreenMap.jsx'
 import { Locate, Thermometer, Leaf, Download, ExternalLink } from 'lucide-react';
-import { downloadMap } from '../services/api.js';
+import { downloadMap, getLocationName } from '../services/api.js';
 
-const ResultsPanel = ({results, analyzing, mapContainerRef}) => {
+const ResultsPanel = ({results, analyzing, mapContainerRef, formData}) => {
   const [fullscreenMap, setFullscreenMap] = useState(false);
   const [error, setError] = useState(null);
+  const [locationName, setLocationName] = useState('');
+
+  // Fetch location name when coordinates change
+  useEffect(() => {
+    if (formData?.latitude && formData?.longitude) {
+      const fetchLocation = async () => {
+        let locName = 'Unknown Location';
+        try {
+          const location = await getLocationName(parseFloat(formData.latitude), parseFloat(formData.longitude));
+          locName = location.fullName;
+        } catch (err) {
+          console.error('Error fetching location:', err);
+        }
+        setLocationName(locName)
+      };
+      fetchLocation();
+    }
+  }, [formData?.latitude, formData?.longitude]);
 
   // Open location in Google Maps
   const openInMaps = (lat, lon) => {
     window.open(`https://www.google.com/maps?q=${lat},${lon}`, '_blank');
   };
 
-  // Download map HTML file
   const handleDownloadMap = async () => {
     try {
       if (!results || !results.mapFileName) {
         setError('Map file not available');
         return;
       }
+      
+      // Download the map
       await downloadMap(results.mapFileName);
+      
+      // Create download record
+      const downloadRecord = {
+        id: Date.now().toString(),
+        filename: results.mapFileName,
+        location: `${formData.latitude}, ${formData.longitude}`,
+        dataset: formData.dataset,
+        timestamp: new Date().toISOString(),
+        downloadedAt: new Date().toLocaleString(),
+        analysisDate: `${results.analysisPeriod.start} - ${results.analysisPeriod.end}`
+      };
+      
+      // Save to localStorage
+      const existing = JSON.parse(localStorage.getItem('uhi_download_history') || '[]');
+      existing.unshift(downloadRecord);
+      localStorage.setItem('uhi_download_history', JSON.stringify(existing));
+      
     } catch (err) {
       setError('Failed to download map: ' + err.message);
     }
@@ -40,6 +76,11 @@ const ResultsPanel = ({results, analyzing, mapContainerRef}) => {
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
             <div className="p-2 border-b border-slate-200 flex items-center justify-between">
               <h3 className="text-sm font-semibold text-slate-900">Heat Map</h3>
+                {locationName && (
+                  <span className="text-xs text-blue-600 px-2 py-1">
+                    {locationName}
+                  </span>
+                )}
               <div className="flex items-center gap-3">
                 <FullScreenMap results={results} fullscreenMap={fullscreenMap} setFullscreenMap={setFullscreenMap} />
                 <button 

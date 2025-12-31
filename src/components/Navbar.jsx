@@ -1,8 +1,9 @@
 import { useState } from "react"
 import { Leaf, Database } from "lucide-react"
 import UserGuide from './UserGuide.jsx';
+import AnalysisHistory from './AnalysisHistory.jsx';
 
-const Navbar = () => {
+const Navbar = ({ onLoadAnalysis }) => {
   const [showGuide, setShowGuide] = useState(false);
   return (
     <>
@@ -20,6 +21,7 @@ const Navbar = () => {
               </div>
             </div>
             <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto flex-wrap">
+              <AnalysisHistory onLoadAnalysis={onLoadAnalysis} />
               <button
                 type="button"
                 onClick={() =>

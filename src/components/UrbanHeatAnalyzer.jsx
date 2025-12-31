@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import Navbar from './Navbar.jsx';
 import ConfigurationPanel from './ConfigurationPanel.jsx';
 import ResultsPanel from './ResultsPanel.jsx';
@@ -22,9 +22,35 @@ const UrbanHeatAnalyzer = () => {
   const [logs, setLogs] = useState([]);
   const mapContainerRef = useRef(null);
 
+  // Load analysis from history
+  const handleLoadAnalysis = (analysis) => {
+    console.log('handleLoadAnalysis called with:', analysis);
+    
+    // Fill form with old parameters
+    setFormData({
+      latitude: analysis.latitude.toString(),
+      longitude: analysis.longitude.toString(),
+      startDate: analysis.startDate,
+      endDate: analysis.endDate,
+      cloudCover: analysis.cloudCover.toString(),
+      hotThreshold: analysis.hotThreshold.toString(),
+      vegThreshold: analysis.vegThreshold.toString(),
+      geeProjectId: analysis.geeProjectId,
+      dataset: analysis.dataset
+    });
+    
+    // Load old results
+    if (analysis.results) {
+      console.log('Setting results:', analysis.results);
+      setResults(analysis.results);
+    } else {
+      console.log('No results found in analysis');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <Navbar></Navbar>
+      <Navbar onLoadAnalysis={handleLoadAnalysis}></Navbar>
       <main className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6 py-2 sm:py-3">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 sm:gap-3">
           <ConfigurationPanel 
@@ -42,6 +68,7 @@ const UrbanHeatAnalyzer = () => {
             results={results} 
             analyzing={analyzing} 
             mapContainerRef={mapContainerRef}
+            formData={formData}
           />
         </div>
       </main>

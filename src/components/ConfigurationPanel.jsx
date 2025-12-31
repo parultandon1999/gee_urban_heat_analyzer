@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Locate,
   Thermometer,
@@ -8,7 +9,7 @@ import {
   Loader2,
 } from 'lucide-react';
 
-import { analyzeHeatIsland as callAnalyzeAPI, healthCheck } from '../services/api';
+import { analyzeHeatIsland as callAnalyzeAPI, healthCheck, getLocationName } from '../services/api';
 
 const ConfigurationPanel = ({ 
   formData,
@@ -21,7 +22,21 @@ const ConfigurationPanel = ({
   setLogs, 
   setResults 
 }) => {
+
+  const [locationName, setLocationName] = useState('');
   
+  // Fetch location name when coordinates change
+  const fetchLocationName = async (lat, lon) => {
+    if (lat && lon) {
+      try {
+        const location = await getLocationName(parseFloat(lat), parseFloat(lon));
+        setLocationName(location.fullName);
+      } catch (err) {
+        console.error('Error fetching location:', err);
+      }
+    }
+  };
+
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,6 +44,13 @@ const ConfigurationPanel = ({
       ...prev,
       [name]: value
     }));
+    
+    // Fetch location name if coordinates changed
+    if (name === 'latitude' || name === 'longitude') {
+      const lat = name === 'latitude' ? value : formData.latitude;
+      const lon = name === 'longitude' ? value : formData.longitude;
+      fetchLocationName(lat, lon);
+    }
   };
 
   // Analyze heat island
@@ -65,6 +87,39 @@ const ConfigurationPanel = ({
       
       if (response.success) {
         setResults(response);
+        
+        // Fetch location name before saving
+        let locName = 'Unknown Location';
+        try {
+          const location = await getLocationName(parseFloat(formData.latitude), parseFloat(formData.longitude));
+          locName = location.fullName;
+        } catch (err) {
+          console.error('Error fetching location:', err);
+        }
+        
+        // Track analysis in history with full results
+        const analysisRecord = {
+          id: Date.now().toString(),
+          latitude: parseFloat(formData.latitude),
+          longitude: parseFloat(formData.longitude),
+          location: `${formData.latitude}, ${formData.longitude}`,
+          locationName: locName,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
+          cloudCover: parseInt(formData.cloudCover),
+          hotThreshold: parseFloat(formData.hotThreshold),
+          vegThreshold: parseFloat(formData.vegThreshold),
+          dataset: formData.dataset.trim(),
+          geeProjectId: formData.geeProjectId,
+          timestamp: new Date().toISOString(),
+          searchedAt: new Date().toLocaleString(),
+          results: response
+        };
+        
+        // Save to localStorage
+        const existing = JSON.parse(localStorage.getItem('uhi_analysis_history') || '[]');
+        existing.unshift(analysisRecord);
+        localStorage.setItem('uhi_analysis_history', JSON.stringify(existing));
       } else {
         throw new Error(response.error || 'Analysis failed');
       }
@@ -81,6 +136,7 @@ const ConfigurationPanel = ({
       }]);
     }
   };
+
 
   return (
     <div className="lg:col-span-1">
@@ -113,7 +169,6 @@ const ConfigurationPanel = ({
               />
             </div>
           </div>
-
           {/* Dataset */}
           <div>
             <label className="flex items-center gap-2 text-sm font-medium text-slate-700 mb-2">

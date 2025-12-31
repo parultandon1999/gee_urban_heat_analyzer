@@ -60,6 +60,54 @@ export const streamAnalysisLogs = (sessionId, onLog, onComplete, onError) => {
   }
 };
 
+// Reverse geocoding - get location name from coordinates
+export const getLocationName = async (latitude, longitude) => {
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+      {
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'UrbanHeatIslandAnalyzer'
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch location name');
+    }
+
+    const data = await response.json();
+    
+    // Extract location name from response
+    const address = data.address || {};
+    const locationName = 
+      address.city || 
+      address.town || 
+      address.village || 
+      address.county || 
+      address.state || 
+      'Unknown Location';
+    
+    const country = address.country || '';
+    
+    return {
+      name: locationName,
+      country: country,
+      fullName: `${locationName}, ${country}`,
+      address: data.address
+    };
+  } catch (error) {
+    console.error('Reverse geocoding error:', error);
+    return {
+      name: 'Unknown',
+      country: '',
+      fullName: 'Unknown Location',
+      address: {}
+    };
+  }
+};
+
 // Helper function to add timeout to fetch
 const fetchWithTimeout = (url, options = {}, timeout = REQUEST_TIMEOUT) => {
   return Promise.race([
@@ -328,5 +376,27 @@ export const downloadMap = async (filename) => {
       throw new Error('Download took too long. Please try again.');
     }
     throw error;
+  }
+};
+
+export const deleteMapFile = async (filename) => {
+  try {
+    const response = await fetchWithTimeout(
+      `${API_BASE_URL}/delete-map/${filename}`,
+      {
+        method: 'DELETE'
+      },
+      10000
+    );
+    
+    if (!response.ok) {
+      throw new Error('Failed to delete map file');
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error deleting map file:', error);
+    // Don't throw - allow deletion to proceed even if file delete fails
+    return { success: true };
   }
 };

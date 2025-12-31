@@ -16,11 +16,20 @@ import threading
 import uuid
 from datetime import datetime
 import json
+from werkzeug.routing import BaseConverter
 
 load_dotenv()
 
+
+class FilenameConverter(BaseConverter):
+    regex = r'[^/]+'
+
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+
+app.url_map.converters['filename'] = FilenameConverter
+
 
 # Global dictionary to store log queues for each analysis session
 analysis_sessions = {}
@@ -661,7 +670,7 @@ def get_default_parameters():
 def download_map(filename):
     try:
         # Security: only allow downloading files that match expected pattern
-        if not filename.startswith('urban_heat_map_') or not filename.endswith('.html'):
+        if not filename.startswith(f'urban_heat_map_{latitude}_{longitude}') or not filename.endswith('.html'):
             return jsonify({'error': 'Invalid filename'}), 400
         
         return send_file(
@@ -674,6 +683,22 @@ def download_map(filename):
         return jsonify({'error': 'Map file not found'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/delete-map/<filename:filename>', methods=['DELETE'])
+def delete_map(filename):
+    try:
+        # Security: only allow deleting files that match expected pattern
+        if not filename.startswith('urban_heat_map_') or not filename.endswith('.html'):
+            return jsonify({'error': 'Invalid filename'}), 400
+        
+        if os.path.exists(filename):
+            os.remove(filename)
+            return jsonify({'success': True, 'message': 'Map file deleted'}), 200
+        else:
+            return jsonify({'success': True, 'message': 'File not found, but record deleted'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @app.errorhandler(404)
 def not_found(error):
