@@ -23,6 +23,7 @@ const LocationSearch = ({ onLocationSelect, currentLocation }) => {
 
     if (searchQuery.trim().length < 2) {
       setSuggestions([]);
+      setIsLoading(false);
       return;
     }
 
@@ -32,7 +33,7 @@ const LocationSearch = ({ onLocationSelect, currentLocation }) => {
       setSuggestions(results);
       setIsLoading(false);
       setShowDropdown(true);
-    }, 500); // Wait 500ms after user stops typing
+    }, 500);
 
     return () => {
       if (debounceTimer.current) {
@@ -66,10 +67,10 @@ const LocationSearch = ({ onLocationSelect, currentLocation }) => {
   };
 
   const handleClear = () => {
-    setSearchQuery('');
+    setSearchQuery(false);
     setSuggestions([]);
     setShowDropdown(false);
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   return (
