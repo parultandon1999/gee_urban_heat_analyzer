@@ -1,28 +1,23 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import FullScreenMap from './FullScreenMap.jsx'
 import { Locate, Thermometer, Leaf, Download, ExternalLink, MapPinned } from 'lucide-react';
 import { downloadMap, getLocationName } from '../services/api.js';
 
 const ResultsPanel = ({results, analyzing, mapContainerRef, formData, locationName, setLocationName}) => {
   const [fullscreenMap, setFullscreenMap] = useState(false);
-  const [error, setError] = useState(null);
 
   // Fetch location name when coordinates change
   useEffect(() => {
     if (formData?.latitude && formData?.longitude) {
       const fetchLocation = async () => {
         let locName = 'Unknown Location';
-        try {
-          const location = await getLocationName(parseFloat(formData.latitude), parseFloat(formData.longitude));
-          locName = location.fullName;
-        } catch (err) {
-          console.error('Error fetching location:', err);
-        }
+        const location = await getLocationName(parseFloat(formData.latitude), parseFloat(formData.longitude));
+        locName = location.fullName;
         setLocationName(locName)
       };
       fetchLocation();
     }
-  }, [formData?.latitude, formData?.longitude, setLocationName]);
+  }, [formData?.latitude, formData?.longitude, setLocationName, results?.mapContainerRef, mapContainerRef]);
 
   // Open location in Google Maps
   const openInMaps = (lat, lon) => {
@@ -30,34 +25,29 @@ const ResultsPanel = ({results, analyzing, mapContainerRef, formData, locationNa
   };
 
   const handleDownloadMap = async () => {
-    try {
-      if (!results || !results.mapFileName) {
-        setError('Map file not available');
-        return;
-      }
-      
-      // Download the map
-      await downloadMap(results.mapFileName);
-      
-      // Create download record
-      const downloadRecord = {
-        id: Date.now().toString(),
-        filename: results.mapFileName,
-        location: `${formData.latitude}, ${formData.longitude}`,
-        dataset: formData.dataset,
-        timestamp: new Date().toISOString(),
-        downloadedAt: new Date().toLocaleString(),
-        analysisDate: `${results.analysisPeriod.start} - ${results.analysisPeriod.end}`
-      };
-      
-      // Save to localStorage
-      const existing = JSON.parse(localStorage.getItem('uhi_download_history') || '[]');
-      existing.unshift(downloadRecord);
-      localStorage.setItem('uhi_download_history', JSON.stringify(existing));
-      
-    } catch (err) {
-      setError('Failed to download map: ' + err.message);
+  
+    if (!results || !results.mapFileName) {
+      return;
     }
+    
+    // Download the map
+    await downloadMap(results.mapFileName);
+    
+    // Create download record
+    const downloadRecord = {
+      id: Date.now().toString(),
+      filename: results.mapFileName,
+      location: `${formData.latitude}, ${formData.longitude}`,
+      dataset: formData.dataset,
+      timestamp: new Date().toISOString(),
+      downloadedAt: new Date().toLocaleString(),
+      analysisDate: `${results.analysisPeriod.start} - ${results.analysisPeriod.end}`
+    };
+    
+    // Save to localStorage
+    const existing = JSON.parse(localStorage.getItem('uhi_download_history') || '[]');
+    existing.unshift(downloadRecord);
+    localStorage.setItem('uhi_download_history', JSON.stringify(existing));
   };
 
   useEffect(() => {

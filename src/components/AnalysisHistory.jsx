@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { History, Trash2, Copy, X, RotateCcw } from 'lucide-react';
+import { History, Trash2, Copy, RotateCcw } from 'lucide-react';
 import { deleteMapFile } from '../services/api.js';
 
 const AnalysisHistory = ({ onLoadAnalysis }) => {
@@ -22,11 +22,7 @@ const AnalysisHistory = ({ onLoadAnalysis }) => {
   const loadHistory = () => {
     const saved = localStorage.getItem('uhi_analysis_history');
     if (saved) {
-      try {
-        setAnalyses(JSON.parse(saved));
-      } catch (e) {
-        console.error('Failed to load history:', e);
-      }
+      setAnalyses(JSON.parse(saved));
     }
   };
 
@@ -45,13 +41,6 @@ const AnalysisHistory = ({ onLoadAnalysis }) => {
   // Save to localStorage
   const saveToLocalStorage = (items) => {
     localStorage.setItem('uhi_analysis_history', JSON.stringify(items));
-  };
-
-  // Add new analysis
-  const addAnalysis = (analysisRecord) => {
-    const updated = [analysisRecord, ...analyses];
-    setAnalyses(updated);
-    saveToLocalStorage(updated);
   };
 
   // Remove analysis
@@ -89,8 +78,6 @@ const AnalysisHistory = ({ onLoadAnalysis }) => {
 
   // Load analysis
   const loadAnalysis = (analysis) => {
-    console.log('Loading analysis:', analysis);
-    console.log('Has results:', !!analysis.results);
     onLoadAnalysis(analysis);
     setShowHistory(false);
   };
